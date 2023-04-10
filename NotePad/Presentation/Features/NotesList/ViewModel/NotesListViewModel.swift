@@ -8,28 +8,28 @@
 import SwiftUI
 import Combine
 
-public class NotesListViewModel : ObservableObject  {
-    
-    @Published var notes: [Note] =  []
-    @Published var note:Note?
-    @Published var noteText:String = "" {
-        didSet{
+public class NotesListViewModel: ObservableObject {
+
+    @Published var notes: [Note] = []
+    @Published var note: Note?
+    @Published var noteText: String = "" {
+        didSet {
             note?.note = noteText
         }
     }
 
 
     private let notePadOperation: NotePadOperation
-    
-    init(notePadOperation:NotePadOperation) {
+
+    init(notePadOperation: NotePadOperation) {
         self.notePadOperation = notePadOperation
     }
-    
+
 }
 
 extension NotesListViewModel {
     func loadNotes() async {
-      let notes = await notePadOperation.loadNotes()
+        let notes = await notePadOperation.loadNotes()
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {
                 return
@@ -38,19 +38,18 @@ extension NotesListViewModel {
         }
     }
 
-    
-    func saveNote(note:Note) {
+
+    func saveNote(note: Note) {
         notePadOperation.saveNote(note: note)
     }
-    
-    func deleteNote(note:Note) {
+
+    func deleteNote(note: Note) {
         notePadOperation.deleteNote(note: note)
     }
-    
-    func shareNote(note:Note){
+
+    func shareNote(note: Note) {
         notePadOperation.shareNote(note: note)
     }
-    
-    
-    
+
+
 }

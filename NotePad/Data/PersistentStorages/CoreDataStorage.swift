@@ -11,11 +11,12 @@ import CoreData
 final class CoreDataStorage {
 
     static let shared = CoreDataStorage()
-    
-    private init() {}
+
+    private init() {
+    }
 
     // MARK: - Core Data stack -
-    
+
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreDataStorage")
         container.loadPersistentStores { _, error in
@@ -28,7 +29,7 @@ final class CoreDataStorage {
     }()
 
     // MARK: - Core Data Saving support -
-    
+
     func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {

@@ -9,28 +9,28 @@ import Foundation
 import CoreData
 
 protocol NotesDataSourceProtocol {
-    func getAllNotesFromStrorage() async  -> Notes
-    func saveNoteInStrorage(note:Note)
+    func getAllNotesFromStrorage() async -> Notes
+    func saveNoteInStrorage(note: Note)
     func deleteNoteFromStrorage(note: Note)
 }
 
 
-class NotesDataSource  {
+class NotesDataSource {
     private let coreDataStorage: CoreDataStorage
-    
+
     init(coreDataStorage: CoreDataStorage = CoreDataStorage.shared) {
         self.coreDataStorage = coreDataStorage
     }
 }
 
-extension NotesDataSource : NotesDataSourceProtocol {
-    
+extension NotesDataSource: NotesDataSourceProtocol {
+
     func getAllNotesFromStrorage() async -> Notes {
         await withUnsafeContinuation { continuation in
             coreDataStorage.performBackgroundTask { context in
                 let fetchRequest = NoteCoreData.fetchRequest()
                 do {
-                    let requestEntity =  try context.fetch(fetchRequest)
+                    let requestEntity = try context.fetch(fetchRequest)
                     let coreDataDTO = NoteCoreData.toNoteDTO(requestEntity)
                     continuation.resume(returning: coreDataDTO)
                 } catch {
@@ -39,17 +39,17 @@ extension NotesDataSource : NotesDataSourceProtocol {
             }
         }
     }
-    
-    func saveNoteInStrorage(note:Note) {
-        if let id = note.id , let notetext = note.note {
+
+    func saveNoteInStrorage(note: Note) {
+        if let id = note.id, let notetext = note.note {
             coreDataStorage.performBackgroundTask { context in
                 let fetchRequest = NoteCoreData.fetchRequest()
                 do {
-                    let requestEntity =  try context.fetch(fetchRequest)
-                    if let note = requestEntity.first(where: {$0.id == id}) {
+                    let requestEntity = try context.fetch(fetchRequest)
+                    if let note = requestEntity.first(where: { $0.id == id }) {
                         note.note = notetext
                         try context.save()
-                    }else if let _ = note.toCoreNoteEntityForInserting(context: context) {
+                    } else if let _ = note.toCoreNoteEntityForInserting(context: context) {
                         do {
                             try context.save()
                         } catch {
@@ -62,14 +62,14 @@ extension NotesDataSource : NotesDataSourceProtocol {
             }
         }
     }
-    
+
     func deleteNoteFromStrorage(note: Note) {
-        if let id = note.id  {
+        if let id = note.id {
             coreDataStorage.performBackgroundTask { context in
                 let fetchRequest = NoteCoreData.fetchRequest()
                 do {
-                    let requestEntity =  try context.fetch(fetchRequest)
-                    if let note = requestEntity.first(where: {$0.id == id}) {
+                    let requestEntity = try context.fetch(fetchRequest)
+                    if let note = requestEntity.first(where: { $0.id == id }) {
                         context.delete(note)
                         try context.save()
                     }
@@ -79,6 +79,6 @@ extension NotesDataSource : NotesDataSourceProtocol {
             }
         }
     }
-    
-    
+
+
 }

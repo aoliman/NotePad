@@ -13,9 +13,9 @@ struct Notes: Codable {
 
 // MARK: - Lesson -
 
-struct Note: Codable , Identifiable {
+struct Note: Codable, Identifiable {
     public let id: UUID?
     public var note: String?
     public var date: Date?
-    
+
 }

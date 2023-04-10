@@ -7,29 +7,29 @@
 
 import Foundation
 
-class NotesRepository  {
-    
+class NotesRepository {
+
     private let notesSrc: NotesDataSourceProtocol
-    
+
     init(notesSrc: NotesDataSourceProtocol) {
         self.notesSrc = notesSrc
     }
-    
+
 }
 
-extension NotesRepository : NotesRepoProtocol {
+extension NotesRepository: NotesRepoProtocol {
 
     func getAllNotes() async -> Notes {
         await notesSrc.getAllNotesFromStrorage()
     }
-    
+
     func saveNote(note: Note) {
         notesSrc.saveNoteInStrorage(note: note)
     }
-    
+
     func deleteNote(note: Note) {
         notesSrc.deleteNoteFromStrorage(note: note)
     }
-    
+
 }
 
